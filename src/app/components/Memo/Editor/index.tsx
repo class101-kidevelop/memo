@@ -39,7 +39,7 @@ export default function MemoEditor() {
         theme="snow"
         value={value}
         onChange={setValue}
-        style={{ height: '100%', border: 'none' }}
+        style={{ border: 'none' }}
         modules={{
           toolbar: {
             container: '#toolbar',
