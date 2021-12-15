@@ -13,6 +13,9 @@ import { ReactComponent as MakeTodoIcon } from './assets/check_circle_outline_bl
 import { ReactComponent as MakeImageIcon } from './assets/collections_black_24dp.svg';
 
 import ReactQuill from 'react-quill';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMemoSlice } from 'store/memo';
+import { SearchMemoSelector } from 'store/memo/selectors';
 
 let icons = ReactQuill.Quill.import('ui/icons');
 
@@ -63,14 +66,31 @@ const RightMenu = styled(Menu)`
 `;
 
 export default function MemoToolBar() {
+  const { MemoActions } = useMemoSlice();
+  const dispatch = useDispatch();
+  const search = useSelector(SearchMemoSelector);
+
   return (
     <Box id="toolbar">
       <LeftMenu>
         <TitleText style={{ marginLeft: '5px' }}>MEMO</TitleText>
-        <SmallButton onClick={() => {}} Icon={() => <PostDeleteIcon />} />
+        <SmallButton
+          onClick={() => dispatch(MemoActions.deleteMemo())}
+          Icon={() => <PostDeleteIcon />}
+        />
       </LeftMenu>
       <RightMenu>
-        <SmallButton onClick={() => {}} Icon={() => <PostAddIcon />} />
+        <SmallButton
+          onClick={() =>
+            dispatch(
+              MemoActions.addMemo(
+                '내용을 입력해 주세요',
+                '내용을 입력해 주세요',
+              ),
+            )
+          }
+          Icon={() => <PostAddIcon />}
+        />
         <div>
           <SmallButton
             className="ql-header"
@@ -99,7 +119,12 @@ export default function MemoToolBar() {
             Icon={() => <MakeImageIcon />}
           />
           <Block marginRight="5px" />
-          <SearchInput />
+          <SearchInput
+            search={search}
+            onChange={value =>
+              dispatch(MemoActions.searchMemo({ search: value }))
+            }
+          />
         </div>
       </RightMenu>
     </Box>
